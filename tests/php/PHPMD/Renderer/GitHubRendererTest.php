@@ -22,12 +22,12 @@ use ArrayIterator;
 use PHPMD\AbstractTestCase;
 use PHPMD\ProcessingError;
 use PHPMD\Stubs\WriterStub;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the GitHub renderer implementation.
- *
- * @covers \PHPMD\Renderer\GitHubRenderer
  */
+#[CoversClass(GitHubRenderer::class)]
 class GitHubRendererTest extends AbstractTestCase
 {
     /**
@@ -47,10 +47,10 @@ class GitHubRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator($violations)));
+            ->willReturn(new ArrayIterator($violations));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
 
         $renderer = new GitHubRenderer();
         $renderer->setWriter($writer);
@@ -84,10 +84,10 @@ class GitHubRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator($errors)));
+            ->willReturn(new ArrayIterator($errors));
 
         $renderer = new GitHubRenderer();
         $renderer->setWriter($writer);

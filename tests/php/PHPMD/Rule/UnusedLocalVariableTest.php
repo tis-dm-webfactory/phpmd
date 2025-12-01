@@ -19,13 +19,14 @@
 namespace PHPMD\Rule;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test case for the unused local variable rule.
- *
- * @covers \PHPMD\Rule\AbstractLocalVariable
- * @covers \PHPMD\Rule\UnusedLocalVariable
  */
+#[CoversClass(AbstractLocalVariable::class)]
+#[CoversClass(UnusedLocalVariable::class)]
 class UnusedLocalVariableTest extends AbstractTestCase
 {
     /**
@@ -55,9 +56,8 @@ class UnusedLocalVariableTest extends AbstractTestCase
      * Tests the rule for cases where it should apply.
      *
      * @param string $file The test file to test against.
-     *
-     * @dataProvider getApplyingCases
      */
+    #[DataProvider('getApplyingCases')]
     public function testRuleAppliesTo(string $file): void
     {
         $this->expectRuleHasViolationsForFile($this->getRule($file), static::ONE_VIOLATION, $file);
@@ -67,9 +67,8 @@ class UnusedLocalVariableTest extends AbstractTestCase
      * Tests the rule for cases where it should not apply.
      *
      * @param string $file The test file to test against.
-     *
-     * @dataProvider getNotApplyingCases
      */
+    #[DataProvider('getNotApplyingCases')]
     public function testRuleDoesNotApplyTo(string $file): void
     {
         $this->expectRuleHasViolationsForFile($this->getRule($file), static::NO_VIOLATION, $file);

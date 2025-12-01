@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This is a test case for the NPath complexity rule.
- *
- * @covers \PHPMD\Rule\Design\NpathComplexity
  */
+#[CoversClass(NpathComplexity::class)]
 class NpathComplexityTest extends AbstractTestCase
 {
     /**

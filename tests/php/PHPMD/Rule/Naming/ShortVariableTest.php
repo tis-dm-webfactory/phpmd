@@ -19,12 +19,13 @@
 namespace PHPMD\Rule\Naming;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test case for the really short variable, parameter and property name rule.
- *
- * @covers \PHPMD\Rule\Naming\ShortVariable
  */
+#[CoversClass(ShortVariable::class)]
 class ShortVariableTest extends AbstractTestCase
 {
     /**
@@ -318,9 +319,8 @@ class ShortVariableTest extends AbstractTestCase
 
     /**
      * testRuleAppliesToVariablesWithinForeach
-     *
-     * @dataProvider provideClassWithShortForeachVariables
      */
+    #[DataProvider('provideClassWithShortForeachVariables')]
     public function testRuleAppliesToVariablesWithinForeach(string $allowShortVarInLoop, int $expectedErrorsCount): void
     {
         $rule = new ShortVariable();

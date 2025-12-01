@@ -19,13 +19,14 @@
 namespace PHPMD\Rule;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RequiresPhp;
 
 /**
  * Test case for the unused formal parameter rule.
- *
- * @covers \PHPMD\Rule\AbstractLocalVariable
- * @covers \PHPMD\Rule\UnusedFormalParameter
  */
+#[CoversClass(AbstractLocalVariable::class)]
+#[CoversClass(UnusedFormalParameter::class)]
 class UnusedFormalParameterTest extends AbstractTestCase
 {
     /**
@@ -482,9 +483,7 @@ class UnusedFormalParameterTest extends AbstractTestCase
         $rule->apply($methods[0]);
     }
 
-    /**
-     * @requires PHP >= 8.3
-     */
+    #[RequiresPhp('>= 8.3')]
     public function testRuleDoesNotApplyToMethodWithOverrideAttribute(): void
     {
         if (\PHP_VERSION_ID < 80300) {
@@ -496,9 +495,7 @@ class UnusedFormalParameterTest extends AbstractTestCase
         $rule->apply($this->getMethod());
     }
 
-    /**
-     * @requires PHP >= 8.3
-     */
+    #[RequiresPhp('>= 8.3')]
     public function testRuleAppliesToMethodWithoutOverrideAttribute(): void
     {
         if (\PHP_VERSION_ID < 80300) {
@@ -510,9 +507,7 @@ class UnusedFormalParameterTest extends AbstractTestCase
         $rule->apply($this->getMethod());
     }
 
-    /**
-     * @requires PHP < 8.3
-     */
+    #[RequiresPhp('< 8.3')]
     public function testRuleAppliesToMethodWithOverrideAttributeBeforePhp83(): void
     {
         if (\PHP_VERSION_ID >= 80300) {

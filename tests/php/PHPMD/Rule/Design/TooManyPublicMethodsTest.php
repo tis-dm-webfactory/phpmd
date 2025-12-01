@@ -24,12 +24,12 @@ use PHPMD\AbstractTestCase;
 use PHPMD\Node\ClassNode;
 use PHPMD\Node\MethodNode;
 use PHPMD\Report;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the too many public methods rule.
- *
- * @covers \PHPMD\Rule\Design\TooManyPublicMethods
  */
+#[CoversClass(TooManyPublicMethods::class)]
 class TooManyPublicMethodsTest extends AbstractTestCase
 {
     public function testRuleDoesNotApplyToClassesWithLessMethodsThanThreshold(): void
@@ -162,10 +162,10 @@ class TooManyPublicMethodsTest extends AbstractTestCase
 
         $class->expects(static::any())
             ->method('getMethods')
-            ->will(static::returnValue([
+            ->willReturn([
                 ...array_map($this->createPublicMethod(...), $publicMethods),
                 ...array_map($this->createPrivateMethod(...), $privateMethods),
-            ]));
+            ]);
 
         return $class;
     }

@@ -24,12 +24,12 @@ use PHPMD\Console\OutputInterface;
 use PHPMD\ProcessingError;
 use PHPMD\Stubs\RuleStub;
 use PHPMD\Stubs\WriterStub;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the text renderer implementation.
- *
- * @covers \PHPMD\Renderer\TextRenderer
  */
+#[CoversClass(TextRenderer::class)]
 class TextRendererTest extends AbstractTestCase
 {
     /**
@@ -52,10 +52,10 @@ class TextRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator($violations)));
+            ->willReturn(new ArrayIterator($violations));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
 
         $renderer = new TextRenderer();
         $renderer->setWriter($writer);
@@ -91,10 +91,10 @@ class TextRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator($violations)));
+            ->willReturn(new ArrayIterator($violations));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
 
         $renderer->start();
         $renderer->renderReport($report);
@@ -127,10 +127,10 @@ class TextRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator($violations)));
+            ->willReturn(new ArrayIterator($violations));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
 
         $renderer->start();
         $renderer->renderReport($report);
@@ -159,10 +159,10 @@ class TextRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator($errors)));
+            ->willReturn(new ArrayIterator($errors));
 
         $renderer = new TextRenderer();
         $renderer->setWriter($writer);

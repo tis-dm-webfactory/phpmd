@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the too many methods rule.
- *
- * @covers \PHPMD\Rule\Design\TooManyFields
  */
+#[CoversClass(TooManyFields::class)]
 class TooManyFieldsTest extends AbstractTestCase
 {
     /**

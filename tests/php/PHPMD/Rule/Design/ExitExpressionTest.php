@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Rule\Design\ExitExpression} class.
- *
- * @covers \PHPMD\Rule\Design\ExitExpression
  */
+#[CoversClass(ExitExpression::class)]
 class ExitExpressionTest extends AbstractTestCase
 {
     /**

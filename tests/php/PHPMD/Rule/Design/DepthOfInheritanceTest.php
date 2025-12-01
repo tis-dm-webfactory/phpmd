@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Rule\Design\DepthOfInheritance} class.
- *
- * @covers \PHPMD\Rule\Design\DepthOfInheritance
  */
+#[CoversClass(DepthOfInheritance::class)]
 class DepthOfInheritanceTest extends AbstractTestCase
 {
     /**

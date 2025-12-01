@@ -19,13 +19,14 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Rule\Design\GotoStatement} class.
  *
- * @covers \PHPMD\Rule\Design\GotoStatement
  * @link https://www.pivotaltracker.com/story/show/10474873
  */
+#[CoversClass(GotoStatement::class)]
 class GotoStatementTest extends AbstractTestCase
 {
     /**

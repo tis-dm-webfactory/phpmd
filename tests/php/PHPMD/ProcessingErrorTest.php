@@ -18,12 +18,15 @@
 
 namespace PHPMD;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Test case for the processing error class.
  *
- * @covers \PHPMD\ProcessingError
  * @since 1.2.1
  */
+#[CoversClass(ProcessingError::class)]
 class ProcessingErrorTest extends AbstractTestCase
 {
     /**
@@ -40,9 +43,8 @@ class ProcessingErrorTest extends AbstractTestCase
      * a given exception message,
      *
      * @param string $message The original exception message
-     *
-     * @dataProvider getParserExceptionMessages
      */
+    #[DataProvider('getParserExceptionMessages')]
     public function testGetFileReturnsExpectedFileName(string $message): void
     {
         $processingError = new ProcessingError($message);

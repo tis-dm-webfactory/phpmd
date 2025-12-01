@@ -27,12 +27,12 @@ use PHPMD\Node\ClassNode;
 use PHPMD\Node\FunctionNode;
 use PHPMD\Rule\CleanCode\ElseExpression;
 use PHPMD\Stubs\RuleStub;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\RuleSet} class.
- *
- * @covers \PHPMD\RuleSet
  */
+#[CoversClass(RuleSet::class)]
 class RuleSetTest extends AbstractTestCase
 {
     /**

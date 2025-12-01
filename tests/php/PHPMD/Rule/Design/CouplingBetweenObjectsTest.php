@@ -19,13 +19,14 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Rule\Design\CouplingBetweenObjects} class.
  *
- * @covers \PHPMD\Rule\Design\CouplingBetweenObjects
  * @link https://www.pivotaltracker.com/story/show/10474987
  */
+#[CoversClass(CouplingBetweenObjects::class)]
 class CouplingBetweenObjectsTest extends AbstractTestCase
 {
     /**

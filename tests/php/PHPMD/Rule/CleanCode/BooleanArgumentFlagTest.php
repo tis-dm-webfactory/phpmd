@@ -19,6 +19,7 @@
 namespace PHPMD\Rule\CleanCode;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @coversDefaultClass \PHPMD\Rule\CleanCode\BooleanArgumentFlag
@@ -42,9 +43,8 @@ class BooleanArgumentFlagTest extends AbstractTestCase
      * Tests the rule for cases where it should apply.
      *
      * @param string $file The test file to test against.
-     *
-     * @dataProvider getApplyingCases
      */
+    #[DataProvider('getApplyingCases')]
     public function testRuleAppliesTo(string $file): void
     {
         $this->expectRuleHasViolationsForFile($this->getRule(), static::ONE_VIOLATION, $file);
@@ -54,9 +54,8 @@ class BooleanArgumentFlagTest extends AbstractTestCase
      * Tests the rule for cases where it should not apply.
      *
      * @param string $file The test file to test against.
-     *
-     * @dataProvider getNotApplyingCases
      */
+    #[DataProvider('getNotApplyingCases')]
     public function testRuleDoesNotApplyTo(string $file): void
     {
         $this->expectRuleHasViolationsForFile($this->getRule(), static::NO_VIOLATION, $file);

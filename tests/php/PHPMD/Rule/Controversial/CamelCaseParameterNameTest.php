@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Controversial;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the camel case parameter name rule.
- *
- * @covers \PHPMD\Rule\Controversial\CamelCaseParameterName
  */
+#[CoversClass(CamelCaseParameterName::class)]
 class CamelCaseParameterNameTest extends AbstractTestCase
 {
     /**

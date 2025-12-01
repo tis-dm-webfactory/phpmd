@@ -19,12 +19,12 @@
 namespace PHPMD\Rule;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the cyclomatic complexity violation rule.
- *
- * @covers \PHPMD\Rule\CyclomaticComplexity
  */
+#[CoversClass(CyclomaticComplexity::class)]
 class CyclomaticComplexityTest extends AbstractTestCase
 {
     /**

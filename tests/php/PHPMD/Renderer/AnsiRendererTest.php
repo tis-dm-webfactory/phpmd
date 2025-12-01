@@ -21,12 +21,12 @@ namespace PHPMD\Renderer;
 use ArrayIterator;
 use PHPMD\AbstractTestCase;
 use PHPMD\Stubs\WriterStub;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the ansi renderer implementation.
- *
- * @covers \PHPMD\Renderer\AnsiRendererTest
  */
+#[CoversClass(AnsiRendererTest::class)]
 class AnsiRendererTest extends AbstractTestCase
 {
     /**
@@ -49,19 +49,19 @@ class AnsiRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::atLeastOnce())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator($violations)));
+            ->willReturn(new ArrayIterator($violations));
         $report->expects(static::atLeastOnce())
             ->method('isEmpty')
-            ->will(static::returnValue(false));
+            ->willReturn(false);
         $report->expects(static::atLeastOnce())
             ->method('hasErrors')
-            ->will(static::returnValue(true));
+            ->willReturn(true);
         $report->expects(static::atLeastOnce())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator($errors)));
+            ->willReturn(new ArrayIterator($errors));
         $report->expects(static::once())
             ->method('getElapsedTimeInMillis')
-            ->will(static::returnValue(200));
+            ->willReturn(200.0);
 
         $renderer = new AnsiRenderer();
         $renderer->setWriter($writer);
@@ -101,19 +101,19 @@ class AnsiRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::atLeastOnce())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
         $report->expects(static::atLeastOnce())
             ->method('isEmpty')
-            ->will(static::returnValue(true));
+            ->willReturn(true);
         $report->expects(static::atLeastOnce())
             ->method('hasErrors')
-            ->will(static::returnValue(false));
+            ->willReturn(false);
         $report->expects(static::atLeastOnce())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
         $report->expects(static::once())
             ->method('getElapsedTimeInMillis')
-            ->will(static::returnValue(200));
+            ->willReturn(200.0);
 
         $renderer = new AnsiRenderer();
         $renderer->setWriter($writer);

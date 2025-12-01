@@ -19,12 +19,12 @@
 namespace PHPMD\Node;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Node\Annotations} class.
- *
- * @covers \PHPMD\Node\Annotations
  */
+#[CoversClass(Annotations::class)]
 class AnnotationsTest extends AbstractTestCase
 {
     /**
@@ -45,14 +45,12 @@ class AnnotationsTest extends AbstractTestCase
         $class->expects(static::once())
             ->method('__call')
             ->with(static::equalTo('getComment'))
-            ->will(
-                static::returnValue(
-                    '/**
-                      * @SuppressWarnings("Foo")
-                      * @SuppressWarnings("Bar")
-                      * @SuppressWarnings("Baz")
-                      */'
-                )
+            ->willReturn(
+                '/**
+                  * @SuppressWarnings("Foo")
+                  * @SuppressWarnings("Bar")
+                  * @SuppressWarnings("Baz")
+                  */'
             );
 
         $annotations = new Annotations($class);
@@ -68,7 +66,7 @@ class AnnotationsTest extends AbstractTestCase
         $class->expects(static::once())
             ->method('__call')
             ->with(static::equalTo('getComment'))
-            ->will(static::returnValue('/** @SuppressWarnings("PMD") */'));
+            ->willReturn('/** @SuppressWarnings("PMD") */');
 
         $annotations = new Annotations($class);
         static::assertTrue($annotations->suppresses($this->getRuleMock()));
@@ -83,13 +81,11 @@ class AnnotationsTest extends AbstractTestCase
         $class->expects(static::once())
             ->method('__call')
             ->with(static::equalTo('getComment'))
-            ->will(
-                static::returnValue(
-                    '/**
-                      * @SuppressWarnings("FooBar")
-                      * @SuppressWarnings("PMD")
-                      */'
-                )
+            ->willReturn(
+                '/**
+                  * @SuppressWarnings("FooBar")
+                  * @SuppressWarnings("PMD")
+                  */'
             );
 
         $annotations = new Annotations($class);

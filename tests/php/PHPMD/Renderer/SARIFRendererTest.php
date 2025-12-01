@@ -23,12 +23,12 @@ use PHPMD\AbstractTestCase;
 use PHPMD\ProcessingError;
 use PHPMD\Stubs\RuleStub;
 use PHPMD\Stubs\WriterStub;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the SARIF renderer implementation.
- *
- * @covers \PHPMD\Renderer\SARIFRenderer
  */
+#[CoversClass(SARIFRenderer::class)]
 class SARIFRendererTest extends AbstractTestCase
 {
     /**
@@ -57,10 +57,10 @@ class SARIFRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator($violations)));
+            ->willReturn(new ArrayIterator($violations));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
 
         $renderer = new SARIFRenderer();
         $renderer->setWriter($writer);
@@ -105,10 +105,10 @@ class SARIFRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator($processingErrors)));
+            ->willReturn(new ArrayIterator($processingErrors));
 
         $renderer = new SARIFRenderer();
         $renderer->setWriter($writer);

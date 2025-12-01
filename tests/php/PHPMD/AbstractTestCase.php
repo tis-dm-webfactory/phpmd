@@ -431,7 +431,9 @@ abstract class AbstractTestCase extends AbstractStaticTestCase
      */
     protected function getRuleMock()
     {
-        return @$this->getMockForAbstractClass(AbstractRule::class);
+        return $this->getMockBuilder(AbstractRule::class)
+            ->onlyMethods(['apply'])
+            ->getMock();
     }
 
     /**

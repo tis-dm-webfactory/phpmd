@@ -19,12 +19,12 @@
 namespace PHPMD\Rule;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the unused private field rule.
- *
- * @covers \PHPMD\Rule\UnusedPrivateField
  */
+#[CoversClass(UnusedPrivateField::class)]
 class UnusedPrivateFieldTest extends AbstractTestCase
 {
     /**

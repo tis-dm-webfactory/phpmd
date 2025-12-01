@@ -31,14 +31,14 @@ use PDepend\Util\Configuration;
 use PHPMD\Node\ClassNode;
 use PHPMD\Node\FunctionNode;
 use PHPMD\Node\MethodNode;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Test case for the PHP_Depend backend adapter class.
- *
- * @covers \PHPMD\Parser
  */
+#[CoversClass(Parser::class)]
 class ParserTest extends AbstractTestCase
 {
     /**
@@ -49,7 +49,7 @@ class ParserTest extends AbstractTestCase
         $mock = $this->getPHPDependClassMock();
         $mock->expects(static::once())
             ->method('isUserDefined')
-            ->will(static::returnValue(true));
+            ->willReturn(true);
 
         $adapter = new Parser($this->getPHPDependMock());
         $adapter->addRuleSet($this->getRuleSetMock(ClassNode::class));
@@ -66,7 +66,7 @@ class ParserTest extends AbstractTestCase
         $mock = $this->getPHPDependClassMock();
         $mock->expects(static::once())
             ->method('isUserDefined')
-            ->will(static::returnValue(false));
+            ->willReturn(false);
 
         $adapter = new Parser($this->getPHPDependMock());
         $adapter->addRuleSet($this->getRuleSetMock());
@@ -134,9 +134,9 @@ class ParserTest extends AbstractTestCase
         $pdepend = $this->getPHPDependMock();
         $pdepend->expects(static::once())
             ->method('getExceptions')
-            ->will(static::returnValue([
+            ->willReturn([
                 new InvalidStateException(42, __FILE__, 'foo'),
-            ]));
+            ]);
 
         $parser = new Parser($pdepend);
         $parser->parse($report);
@@ -172,16 +172,16 @@ class ParserTest extends AbstractTestCase
             ->getMock();
         $class->expects(static::any())
             ->method('getCompilationUnit')
-            ->will(static::returnValue($this->getPHPDependFileMock('foo.php')));
+            ->willReturn($this->getPHPDependFileMock('foo.php'));
         $class->expects(static::any())
             ->method('getConstants')
-            ->will(static::returnValue([]));
+            ->willReturn([]);
         $class->expects(static::any())
             ->method('getProperties')
-            ->will(static::returnValue(new ASTArtifactList([])));
+            ->willReturn(new ASTArtifactList([]));
         $class->expects(static::any())
             ->method('getMethods')
-            ->will(static::returnValue(new ASTArtifactList([])));
+            ->willReturn(new ASTArtifactList([]));
 
         return $class;
     }
@@ -198,7 +198,7 @@ class ParserTest extends AbstractTestCase
             ->getMock();
         $function->expects(static::atLeastOnce())
             ->method('getCompilationUnit')
-            ->will(static::returnValue($this->getPHPDependFileMock($fileName)));
+            ->willReturn($this->getPHPDependFileMock($fileName));
 
         return $function;
     }
@@ -215,7 +215,7 @@ class ParserTest extends AbstractTestCase
             ->getMock();
         $method->expects(static::atLeastOnce())
             ->method('getCompilationUnit')
-            ->will(static::returnValue($this->getPHPDependFileMock($fileName)));
+            ->willReturn($this->getPHPDependFileMock($fileName));
 
         return $method;
     }
@@ -232,7 +232,7 @@ class ParserTest extends AbstractTestCase
             ->getMock();
         $file->expects(static::any())
             ->method('getFileName')
-            ->will(static::returnValue($fileName));
+            ->willReturn($fileName);
 
         return $file;
     }

@@ -22,12 +22,12 @@ use ArrayIterator;
 use PHPMD\AbstractTestCase;
 use PHPMD\ProcessingError;
 use PHPMD\Stubs\WriterStub;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the JSON renderer implementation.
- *
- * @covers \PHPMD\Renderer\JSONRenderer
  */
+#[CoversClass(JSONRenderer::class)]
 class JSONRendererTest extends AbstractTestCase
 {
     /**
@@ -46,10 +46,10 @@ class JSONRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator($violations)));
+            ->willReturn(new ArrayIterator($violations));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
 
         $renderer = new JSONRenderer();
         $renderer->setWriter($writer);
@@ -81,10 +81,10 @@ class JSONRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator([])));
+            ->willReturn(new ArrayIterator([]));
         $report->expects(static::once())
             ->method('getErrors')
-            ->will(static::returnValue(new ArrayIterator($processingErrors)));
+            ->willReturn(new ArrayIterator($processingErrors));
 
         $renderer = new JSONRenderer();
         $renderer->setWriter($writer);

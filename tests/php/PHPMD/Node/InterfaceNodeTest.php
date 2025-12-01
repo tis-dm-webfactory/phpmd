@@ -21,13 +21,13 @@ namespace PHPMD\Node;
 use PDepend\Source\AST\ASTInterface;
 use PDepend\Source\AST\ASTNamespace;
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the interface node implementation.
- *
- * @covers \PHPMD\Node\AbstractTypeNode
- * @covers \PHPMD\Node\InterfaceNode
  */
+#[CoversClass(AbstractTypeNode::class)]
+#[CoversClass(InterfaceNode::class)]
 class InterfaceNodeTest extends AbstractTestCase
 {
     /**

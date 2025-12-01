@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Naming;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the constructor name rule.
- *
- * @covers \PHPMD\Rule\Naming\ConstructorWithNameAsEnclosingClass
  */
+#[CoversClass(ConstructorWithNameAsEnclosingClass::class)]
 class ConstructorWithNameAsEnclosingClassTest extends AbstractTestCase
 {
     /**

@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Naming;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the really long variable, parameter and property name rule.
- *
- * @covers \PHPMD\Rule\Naming\LongVariable
  */
+#[CoversClass(LongVariable::class)]
 class LongVariableTest extends AbstractTestCase
 {
     /**

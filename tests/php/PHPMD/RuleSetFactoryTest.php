@@ -23,13 +23,14 @@ use org\bovigo\vfs\vfsStream;
 use PHPMD\Exception\RuleClassFileNotFoundException;
 use PHPMD\Exception\RuleClassNotFoundException;
 use PHPMD\Exception\RuleSetNotFoundException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 
 /**
  * Test case for the rule set factory class.
- *
- * @covers \PHPMD\RuleSetFactory
  */
+#[CoversClass(RuleSetFactory::class)]
 class RuleSetFactoryTest extends AbstractTestCase
 {
     /**
@@ -637,9 +638,8 @@ class RuleSetFactoryTest extends AbstractTestCase
      * Checks the ruleset XML files provided with PHPMD all provide externalInfoUrls
      *
      * @param string $file The path to the ruleset xml to test
-     *
-     * @dataProvider getDefaultRuleSets
      */
+    #[DataProvider('getDefaultRuleSets')]
     public function testDefaultRuleSetsProvideExternalInfoUrls(string $file): void
     {
         $ruleSets = $this->createRuleSetsFromFiles($file);
