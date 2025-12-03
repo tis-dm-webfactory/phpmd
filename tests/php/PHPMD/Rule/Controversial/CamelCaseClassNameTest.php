@@ -19,11 +19,12 @@ use PDepend\Source\AST\ASTClass;
 use PDepend\Source\AST\ASTNamespace;
 use PHPMD\AbstractTestCase;
 use PHPMD\Node\ClassNode;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the camel case class name rule.
- * @covers \PHPMD\Rule\Controversial\CamelCaseClassName
  */
+#[CoversClass(CamelCaseClassName::class)]
 class CamelCaseClassNameTest extends AbstractTestCase
 {
     public function testRuleDoesNotApplyForValidClassName(): void

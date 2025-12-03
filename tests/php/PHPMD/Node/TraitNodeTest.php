@@ -21,13 +21,13 @@ namespace PHPMD\Node;
 use PDepend\Source\AST\ASTNamespace;
 use PDepend\Source\AST\ASTTrait;
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the trait node implementation.
- *
- * @covers \PHPMD\Node\AbstractTypeNode
- * @covers \PHPMD\Node\TraitNode
  */
+#[CoversClass(AbstractTypeNode::class)]
+#[CoversClass(TraitNode::class)]
 class TraitNodeTest extends AbstractTestCase
 {
     /**

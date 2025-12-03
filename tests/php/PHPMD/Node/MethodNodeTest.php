@@ -22,13 +22,13 @@ use PDepend\Source\AST\ASTClass;
 use PDepend\Source\AST\ASTMethod;
 use PDepend\Source\AST\ASTNamespace;
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the method node implementation.
- *
- * @covers \PHPMD\Node\AbstractCallableNode
- * @covers \PHPMD\Node\MethodNode
  */
+#[CoversClass(AbstractCallableNode::class)]
+#[CoversClass(MethodNode::class)]
 class MethodNodeTest extends AbstractTestCase
 {
     /**

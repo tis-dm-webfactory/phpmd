@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Controversial;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the camel case property name rule.
- *
- * @covers \PHPMD\Rule\Controversial\CamelCasePropertyName
  */
+#[CoversClass(CamelCasePropertyName::class)]
 class CamelCasePropertyNameTest extends AbstractTestCase
 {
     /**

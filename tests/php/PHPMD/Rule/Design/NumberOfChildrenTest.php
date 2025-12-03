@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Rule\Design\NumberOfChildren} class.
- *
- * @covers \PHPMD\Rule\Design\NumberOfChildren
  */
+#[CoversClass(NumberOfChildren::class)]
 class NumberOfChildrenTest extends AbstractTestCase
 {
     /**

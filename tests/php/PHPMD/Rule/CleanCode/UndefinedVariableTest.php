@@ -19,6 +19,7 @@
 namespace PHPMD\Rule\CleanCode;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test case for the undefined variable rule.
@@ -39,9 +40,8 @@ class UndefinedVariableTest extends AbstractTestCase
      * Tests the rule for cases where it should apply.
      *
      * @param string $file The test file to test against.
-     *
-     * @dataProvider getApplyingCases
      */
+    #[DataProvider('getApplyingCases')]
     public function testRuleAppliesTo(string $file): void
     {
         $this->expectRuleHasViolationsForFile($this->getRule(), static::ONE_VIOLATION, $file);
@@ -51,9 +51,8 @@ class UndefinedVariableTest extends AbstractTestCase
      * Tests the rule for cases where it should not apply.
      *
      * @param string $file The test file to test against.
-     *
-     * @dataProvider getNotApplyingCases
      */
+    #[DataProvider('getNotApplyingCases')]
     public function testRuleDoesNotApplyTo(string $file): void
     {
         $this->expectRuleHasViolationsForFile($this->getRule(), static::NO_VIOLATION, $file);

@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the excessive long class rule.
- *
- * @covers \PHPMD\Rule\Design\LongClass
  */
+#[CoversClass(LongClass::class)]
 class LongClassTest extends AbstractTestCase
 {
     /**

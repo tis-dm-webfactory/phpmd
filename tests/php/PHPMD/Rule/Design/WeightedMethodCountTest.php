@@ -19,13 +19,14 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the weighted method count rule.
  *
- * @covers \PHPMD\Rule\Design\WeightedMethodCount
  * @since 0.2.5
  */
+#[CoversClass(WeightedMethodCount::class)]
 class WeightedMethodCountTest extends AbstractTestCase
 {
     /**

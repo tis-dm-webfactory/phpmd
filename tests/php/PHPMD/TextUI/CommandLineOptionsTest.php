@@ -35,13 +35,14 @@ use PHPMD\Renderer\SARIFRenderer;
 use PHPMD\Renderer\TextRenderer;
 use PHPMD\Renderer\XMLRenderer;
 use PHPMD\Rule;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionProperty;
 
 /**
  * Test case for the {@link \PHPMD\TextUI\CommandLineOptions} class.
- *
- * @covers \PHPMD\TextUI\CommandLineOptions
  */
+#[CoversClass(CommandLineOptions::class)]
 class CommandLineOptionsTest extends AbstractTestCase
 {
     /**
@@ -624,9 +625,9 @@ class CommandLineOptionsTest extends AbstractTestCase
     /**
      * @param class-string $expectedClass
      *
-     * @dataProvider dataProviderCreateRenderer
      * @covers \PHPMD\Renderer\RendererFactory::getRenderer
      */
+    #[DataProvider('dataProviderCreateRenderer')]
     public function testCreateRenderer(string $reportFormat, $expectedClass): void
     {
         require_once self::$filesDirectory . '/PHPMD/Test/Renderer/NamespaceRenderer.php';
@@ -662,9 +663,9 @@ class CommandLineOptionsTest extends AbstractTestCase
     }
 
     /**
-     * @dataProvider dataProviderCreateRendererThrowsException
      * @covers \PHPMD\Renderer\RendererFactory::getCustomRenderer
      */
+    #[DataProvider('dataProviderCreateRendererThrowsException')]
     public function testCreateRendererThrowsException(string $reportFormat, string $expectedExceptionMessage): void
     {
         self::expectExceptionObject(new InvalidArgumentException(
@@ -703,9 +704,7 @@ class CommandLineOptionsTest extends AbstractTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderDeprecatedCliOptions
-     */
+    #[DataProvider('dataProviderDeprecatedCliOptions')]
     public function testDeprecatedCliOptions(string $deprecatedName, string $newName, Closure $result): void
     {
         $args = [__FILE__, __FILE__, 'text', 'codesize', sprintf('--%s', $deprecatedName), '42'];
@@ -751,9 +750,8 @@ class CommandLineOptionsTest extends AbstractTestCase
     /**
      * @param list<string> $options
      * @param list<mixed> $expected
-     *
-     * @dataProvider dataProviderGetReportFiles
      */
+    #[DataProvider('dataProviderGetReportFiles')]
     public function testGetReportFiles(array $options, array $expected): void
     {
         $args = [__FILE__, __FILE__, 'text', 'codesize', ...$options];

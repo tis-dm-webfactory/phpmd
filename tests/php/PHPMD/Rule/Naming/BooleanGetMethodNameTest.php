@@ -20,12 +20,13 @@ namespace PHPMD\Rule\Naming;
 
 use PHPMD\AbstractTestCase;
 use PHPMD\Node\MethodNode;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RequiresPhp;
 
 /**
  * Test case for the {@link \PHPMD\Rule\Naming\BooleanGetMethodName} rule class.
- *
- * @covers \PHPMD\Rule\Naming\BooleanGetMethodName
  */
+#[CoversClass(BooleanGetMethodName::class)]
 class BooleanGetMethodNameTest extends AbstractTestCase
 {
     /**
@@ -133,9 +134,8 @@ class BooleanGetMethodNameTest extends AbstractTestCase
 
     /**
      * testRuleAppliesToReturnDeclarationTrue
-     *
-     * @requires PHP 8.2.0
      */
+    #[RequiresPhp('>= 8.2.0')]
     public function testRuleAppliesToReturnDeclarationTrue(): void
     {
         $rule = new BooleanGetMethodName();
@@ -146,9 +146,8 @@ class BooleanGetMethodNameTest extends AbstractTestCase
 
     /**
      * testRuleAppliesToReturnDeclarationFalse
-     *
-     * @requires PHP 8.2.0
      */
+    #[RequiresPhp('>= 8.2.0')]
     public function testRuleAppliesToReturnDeclarationFalse(): void
     {
         $rule = new BooleanGetMethodName();

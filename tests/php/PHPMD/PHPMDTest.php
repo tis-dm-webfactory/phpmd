@@ -23,12 +23,12 @@ use PHPMD\Baseline\BaselineSet;
 use PHPMD\Baseline\BaselineValidator;
 use PHPMD\Renderer\XMLRenderer;
 use PHPMD\Stubs\WriterStub;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the main PHPMD class.
- *
- * @covers \PHPMD\PHPMD
  */
+#[CoversClass(PHPMD::class)]
 class PHPMDTest extends AbstractTestCase
 {
     private RuleSetFactory $ruleSetFactory;

@@ -20,12 +20,12 @@ namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
 use PHPMD\Node\ClassNode;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the too many methods rule.
- *
- * @covers \PHPMD\Rule\Design\TooManyMethods
  */
+#[CoversClass(TooManyMethods::class)]
 class TooManyMethodsTest extends AbstractTestCase
 {
     /**
@@ -151,7 +151,7 @@ class TooManyMethodsTest extends AbstractTestCase
         if (is_array($methodNames)) {
             $class->expects(static::once())
                 ->method('getMethodNames')
-                ->will(static::returnValue($methodNames));
+                ->willReturn($methodNames);
         }
 
         return $class;

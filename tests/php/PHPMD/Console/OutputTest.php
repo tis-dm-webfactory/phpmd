@@ -3,6 +3,7 @@
 namespace PHPMD\Console;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @coversDefaultClass  \PHPMD\Console\Output
@@ -56,9 +57,9 @@ class OutputTest extends AbstractTestCase
     }
 
     /**
-     * @dataProvider verbosityProvider
      * @covers ::write
      */
+    #[DataProvider('verbosityProvider')]
     public function testWriteWithVerbosityOption(int $verbosity, string $expected, string $msg): void
     {
         $this->output->setVerbosity($verbosity);

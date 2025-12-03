@@ -19,12 +19,12 @@
 namespace PHPMD\Rule;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the excessive use of public members rule.
- *
- * @covers \PHPMD\Rule\ExcessivePublicCount
  */
+#[CoversClass(ExcessivePublicCount::class)]
 class ExcessivePublicCountTest extends AbstractTestCase
 {
     /**

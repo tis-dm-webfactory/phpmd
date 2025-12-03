@@ -21,12 +21,12 @@ namespace PHPMD\Renderer;
 use ArrayIterator;
 use PHPMD\AbstractTestCase;
 use PHPMD\Stubs\WriterStub;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the html renderer implementation.
- *
- * @covers \PHPMD\Renderer\HTMLRenderer
  */
+#[CoversClass(HTMLRenderer::class)]
 class HTMLRendererTest extends AbstractTestCase
 {
     /**
@@ -46,7 +46,7 @@ class HTMLRendererTest extends AbstractTestCase
         $report = $this->getReportWithNoViolation();
         $report->expects(static::once())
             ->method('getRuleViolations')
-            ->will(static::returnValue(new ArrayIterator($violations)));
+            ->willReturn(new ArrayIterator($violations));
 
         $extraLineInExcerpt = 2;
         $renderer = new HTMLRenderer($extraLineInExcerpt);

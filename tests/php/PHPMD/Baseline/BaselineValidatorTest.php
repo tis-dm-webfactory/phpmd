@@ -5,6 +5,7 @@ namespace PHPMD\Baseline;
 use PHPMD\AbstractTestCase;
 use PHPMD\Rule;
 use PHPMD\RuleViolation;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -31,9 +32,9 @@ class BaselineValidatorTest extends AbstractTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      * @covers ::isBaselined
      */
+    #[DataProvider('dataProvider')]
     public function testIsBaselined(bool $contains, BaselineMode $baselineMode, bool $isBaselined): void
     {
         $this->baselineSet->method('contains')->willReturn($contains);

@@ -21,13 +21,13 @@ namespace PHPMD\Rule\Design;
 use PHPMD\AbstractTestCase;
 use PHPMD\Node\FunctionNode;
 use PHPMD\Node\MethodNode;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test case for the excessive long parameter list rule.
- *
- * @covers \PHPMD\Rule\Design\LongParameterList
  */
+#[CoversClass(LongParameterList::class)]
 class LongParameterListTest extends AbstractTestCase
 {
     /**
@@ -129,7 +129,7 @@ class LongParameterListTest extends AbstractTestCase
     {
         $mock->expects(static::once())
             ->method('getParameterCount')
-            ->will(static::returnValue($parameterCount));
+            ->willReturn($parameterCount);
 
         return $mock;
     }

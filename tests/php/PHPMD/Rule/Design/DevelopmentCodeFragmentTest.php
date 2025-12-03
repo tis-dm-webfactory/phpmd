@@ -19,14 +19,15 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Rule\Design\DevelopmentCodeFragment} class.
  *
- * @covers \PHPMD\Rule\Design\DevelopmentCodeFragment
  * @link https://github.com/phpmd/phpmd/issues/265
  * @since 2.3.0
  */
+#[CoversClass(DevelopmentCodeFragment::class)]
 class DevelopmentCodeFragmentTest extends AbstractTestCase
 {
     /**

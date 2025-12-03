@@ -22,12 +22,12 @@ use PHPMD\Baseline\BaselineMode;
 use PHPMD\Baseline\BaselineSet;
 use PHPMD\Baseline\BaselineValidator;
 use PHPMD\Baseline\ViolationBaseline;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the report class.
- *
- * @covers \PHPMD\Report
  */
+#[CoversClass(Report::class)]
 class ReportTest extends AbstractTestCase
 {
     /**

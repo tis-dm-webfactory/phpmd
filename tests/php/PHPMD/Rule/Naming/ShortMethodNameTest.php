@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Naming;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the very short method and function name rule.
- *
- * @covers \PHPMD\Rule\Naming\ShortMethodName
  */
+#[CoversClass(ShortMethodName::class)]
 class ShortMethodNameTest extends AbstractTestCase
 {
     /**

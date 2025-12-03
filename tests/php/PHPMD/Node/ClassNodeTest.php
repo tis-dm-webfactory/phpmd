@@ -24,13 +24,13 @@ use PDepend\Source\AST\ASTNamespace;
 use PHPMD\AbstractRule;
 use PHPMD\AbstractTestCase;
 use PHPMD\Rule\Design\CouplingBetweenObjects;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the class node implementation.
- *
- * @covers \PHPMD\Node\AbstractTypeNode
- * @covers \PHPMD\Node\ClassNode
  */
+#[CoversClass(AbstractTypeNode::class)]
+#[CoversClass(ClassNode::class)]
 class ClassNodeTest extends AbstractTestCase
 {
     /**

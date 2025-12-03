@@ -19,13 +19,14 @@
 namespace PHPMD;
 
 use PHPMD\Node\NodeInfo;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\RuleViolation} class.
  *
- * @covers \PHPMD\RuleViolation
  * @since 0.2.5
  */
+#[CoversClass(RuleViolation::class)]
 class RuleViolationTest extends AbstractTestCase
 {
     public function testNodeInfoGetters(): void

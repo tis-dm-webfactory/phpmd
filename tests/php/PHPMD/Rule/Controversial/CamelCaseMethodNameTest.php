@@ -20,12 +20,12 @@ namespace PHPMD\Rule\Controversial;
 
 use PHPMD\AbstractTestCase;
 use PHPMD\Node\MethodNode;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the camel case method name rule.
- *
- * @covers \PHPMD\Rule\Controversial\CamelCaseMethodName
  */
+#[CoversClass(CamelCaseMethodName::class)]
 class CamelCaseMethodNameTest extends AbstractTestCase
 {
     /**

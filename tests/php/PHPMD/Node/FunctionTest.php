@@ -20,13 +20,13 @@ namespace PHPMD\Node;
 
 use PDepend\Source\AST\ASTFunction;
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the function node implementation.
- *
- * @covers \PHPMD\Node\AbstractCallableNode
- * @covers \PHPMD\Node\FunctionNode
  */
+#[CoversClass(AbstractCallableNode::class)]
+#[CoversClass(FunctionNode::class)]
 class FunctionTest extends AbstractTestCase
 {
     /**

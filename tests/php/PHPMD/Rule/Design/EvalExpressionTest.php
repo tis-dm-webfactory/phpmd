@@ -19,12 +19,12 @@
 namespace PHPMD\Rule\Design;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Rule\Design\EvalExpression} class.
- *
- * @covers \PHPMD\Rule\Design\EvalExpression
  */
+#[CoversClass(EvalExpression::class)]
 class EvalExpressionTest extends AbstractTestCase
 {
     /**

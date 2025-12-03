@@ -19,12 +19,12 @@
 namespace PHPMD;
 
 use PHPMD\Node\ClassNode;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the parser factory class.
- *
- * @covers \PHPMD\ParserFactory
  */
+#[CoversClass(ParserFactory::class)]
 class ParserFactoryTest extends AbstractTestCase
 {
     /**
@@ -60,7 +60,7 @@ class ParserFactoryTest extends AbstractTestCase
         $phpmd = $this->getMockBuilder(PHPMD::class)->onlyMethods(['getInput'])->getMock();
         $phpmd->expects(static::once())
             ->method('getInput')
-            ->will(static::returnValue($uri));
+            ->willReturn($uri);
 
         $ruleSet = $this->getRuleSetMock(ClassNode::class);
 
@@ -82,7 +82,7 @@ class ParserFactoryTest extends AbstractTestCase
         $phpmd = $this->getMockBuilder(PHPMD::class)->onlyMethods(['getInput'])->getMock();
         $phpmd->expects(static::once())
             ->method('getInput')
-            ->will(static::returnValue($uri1 . ',' . $uri2));
+            ->willReturn($uri1 . ',' . $uri2);
 
         $ruleSet = $this->getRuleSetMock(ClassNode::class, 2);
 
@@ -104,7 +104,7 @@ class ParserFactoryTest extends AbstractTestCase
         $phpmd = $this->getMockBuilder(PHPMD::class)->onlyMethods(['getInput'])->getMock();
         $phpmd->expects(static::once())
             ->method('getInput')
-            ->will(static::returnValue($uri1 . ',' . $uri2));
+            ->willReturn($uri1 . ',' . $uri2);
 
         $ruleSet = $this->getRuleSetMock(ClassNode::class, 2);
 

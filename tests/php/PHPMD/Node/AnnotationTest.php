@@ -19,12 +19,12 @@
 namespace PHPMD\Node;
 
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Node\Annotation} class.
- *
- * @covers \PHPMD\Node\Annotation
  */
+#[CoversClass(Annotation::class)]
 class AnnotationTest extends AbstractTestCase
 {
     /**

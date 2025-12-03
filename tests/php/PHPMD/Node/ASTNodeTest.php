@@ -20,12 +20,12 @@ namespace PHPMD\Node;
 
 use PDepend\Source\AST\ASTNode as PDependNode;
 use PHPMD\AbstractTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test case for the {@link \PHPMD\Node\ASTNode} class.
- *
- * @covers \PHPMD\Node\ASTNode
  */
+#[CoversClass(ASTNode::class)]
 class ASTNodeTest extends AbstractTestCase
 {
     /**
@@ -36,7 +36,7 @@ class ASTNodeTest extends AbstractTestCase
         $mock = $this->getMockBuilder(PDependNode::class)->getMock();
         $mock->expects(static::once())
             ->method('getImage')
-            ->will(static::returnValue(''));
+            ->willReturn('');
 
         $node = new ASTNode($mock, __FILE__);
         $node->getImage();
@@ -50,7 +50,7 @@ class ASTNodeTest extends AbstractTestCase
         $mock = $this->getMockBuilder(PDependNode::class)->getMock();
         $mock->expects(static::once())
             ->method('getImage')
-            ->will(static::returnValue(''));
+            ->willReturn('');
 
         $node = new ASTNode($mock, __FILE__);
         $node->getName();

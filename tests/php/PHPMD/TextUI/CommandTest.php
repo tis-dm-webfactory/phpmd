@@ -20,12 +20,13 @@ namespace PHPMD\TextUI;
 
 use PHPMD\AbstractTestCase;
 use PHPMD\Utility\Paths;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test case for the {@link \PHPMD\TextUI\Command} class.
- *
- * @covers \PHPMD\TextUI\Command
  */
+#[CoversClass(Command::class)]
 class CommandTest extends AbstractTestCase
 {
     /** @var ?resource */
@@ -43,9 +44,8 @@ class CommandTest extends AbstractTestCase
 
     /**
      * @param ?array<string> $options
-     *
-     * @dataProvider dataProviderTestMainWithOption
      */
+    #[DataProvider('dataProviderTestMainWithOption')]
     public function testMainStrictOptionIsOfByDefault(
         string $sourceFile,
         ExitCode $expectedExitCode,
@@ -191,9 +191,7 @@ class CommandTest extends AbstractTestCase
         );
     }
 
-    /**
-     * @dataProvider dataProviderWithFilter
-     */
+    #[DataProvider('dataProviderWithFilter')]
     public function testWithFilter(string $option, string $value): void
     {
         $args = [

@@ -66,21 +66,19 @@ class ExcessivePublicCountWorksCorrectlyWithStaticMethodsRegressionTest extends 
 
         $this->renderer->expects(static::once())
             ->method('renderReport')
-            ->will(
-                static::returnCallback(
-                    function (Report $report) use ($self): void {
-                        $isViolating = false;
-                        foreach ($report->getRuleViolations() as $ruleViolation) {
-                            if (str_starts_with($ruleViolation->getDescription(), $self::VIOLATION_MESSAGE)) {
-                                $isViolating = true;
+            ->willReturnCallback(
+                function (Report $report) use ($self): void {
+                    $isViolating = false;
+                    foreach ($report->getRuleViolations() as $ruleViolation) {
+                        if (str_starts_with($ruleViolation->getDescription(), $self::VIOLATION_MESSAGE)) {
+                            $isViolating = true;
 
-                                break;
-                            }
+                            break;
                         }
-                        $self->assertTrue($isViolating);
-                        $self->assertEquals(4, count($report->getRuleViolations()));
                     }
-                )
+                    $self->assertTrue($isViolating);
+                    $self->assertEquals(4, count($report->getRuleViolations()));
+                }
             );
 
         $phpmd->processFiles(
@@ -109,21 +107,19 @@ class ExcessivePublicCountWorksCorrectlyWithStaticMethodsRegressionTest extends 
 
         $this->renderer->expects(static::once())
             ->method('renderReport')
-            ->will(
-                static::returnCallback(
-                    function (Report $report) use ($self): void {
-                        $isViolating = false;
-                        foreach ($report->getRuleViolations() as $ruleViolation) {
-                            if (str_starts_with($ruleViolation->getDescription(), $self::VIOLATION_MESSAGE)) {
-                                $isViolating = true;
+            ->willReturnCallback(
+                function (Report $report) use ($self): void {
+                    $isViolating = false;
+                    foreach ($report->getRuleViolations() as $ruleViolation) {
+                        if (str_starts_with($ruleViolation->getDescription(), $self::VIOLATION_MESSAGE)) {
+                            $isViolating = true;
 
-                                break;
-                            }
+                            break;
                         }
-                        $self->assertFalse($isViolating);
-                        $self->assertEquals(3, count($report->getRuleViolations()));
                     }
-                )
+                    $self->assertFalse($isViolating);
+                    $self->assertEquals(3, count($report->getRuleViolations()));
+                }
             );
         $phpmd->processFiles(
             __DIR__ . '/Sources/ExcessivePublicCountSuppressionWorksForPublicStaticMethods.php',
