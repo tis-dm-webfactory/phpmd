@@ -18,6 +18,7 @@
 
 namespace PHPMD\Rule\CleanCode;
 
+use InvalidArgumentException;
 use OutOfBoundsException;
 use PDepend\Source\AST\ASTClassOrInterfaceReference;
 use PDepend\Source\AST\ASTMemberPrimaryPrefix;
@@ -60,12 +61,35 @@ final class StaticAccess extends AbstractRule implements FunctionAware, MethodAw
             }
 
             $className = $methodCall->getChild(0)->getNode()->getImage();
-            if ($exceptions->contains($className)) {
+            if ($this->isExcludedFromAnalysis($className, $exceptions)) {
                 continue;
             }
 
             $this->addViolation($methodCall, [$className, $node->getName()]);
         }
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     */
+    protected function isExcludedFromAnalysis(string $className, ExceptionsList $exceptions): bool
+    {
+        if ($exceptions->contains($className)) {
+            return true;
+        }
+
+        foreach ($exceptions as $exception) {
+            if (!str_contains($exception, '*')) {
+                continue;
+            }
+            $exception = str_replace(['*', '\\'], ['.*', '\\\\'], $exception);
+            if (preg_match('/' . $exception . '/', $className)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -267,6 +267,10 @@ abstract class AbstractLocalVariable extends AbstractRule
 
         $parameters = $reflectionFunction->getParameters();
 
+        if (PHP_VERSION_ID < 50600 || $reflectionFunction->isVariadic()) {
+            $argumentPosition = min($argumentPosition, count($parameters) - 1);
+        }
+
         return isset($parameters[$argumentPosition]) && $parameters[$argumentPosition]->isPassedByReference();
     }
 
