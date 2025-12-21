@@ -571,6 +571,9 @@ final class HTMLRenderer extends AbstractRenderer
             // Also, using a reference to non-existing array index doesn't throw a notice.
             $namespaceName = $v->getNamespaceName();
             if ($namespaceName) {
+                if (!isset($result[self::CATEGORY_NAMESPACE][$namespaceName])) {
+                    $result[self::CATEGORY_NAMESPACE][$namespaceName] = 0;
+                }
                 $result[self::CATEGORY_NAMESPACE][$namespaceName]++;
             }
 
@@ -578,8 +581,17 @@ final class HTMLRenderer extends AbstractRenderer
 
             // Friendly priority -> Add a describing word to "just number".
             $friendlyPriority = self::$priorityTitles[$rule->getPriority()];
+            if (!isset($result[self::CATEGORY_PRIORITY][$friendlyPriority])) {
+                $result[self::CATEGORY_PRIORITY][$friendlyPriority] = 0;
+            }
             $result[self::CATEGORY_PRIORITY][$friendlyPriority]++;
+            if (!isset($result[self::CATEGORY_RULESET][$rule->getRuleSetName()])) {
+                $result[self::CATEGORY_RULESET][$rule->getRuleSetName()] = 0;
+            }
             $result[self::CATEGORY_RULESET][$rule->getRuleSetName()]++;
+            if (!isset($result[self::CATEGORY_RULE][$rule->getName()])) {
+                $result[self::CATEGORY_RULE][$rule->getName()] = 0;
+            }
             $result[self::CATEGORY_RULE][$rule->getName()]++;
         }
 
