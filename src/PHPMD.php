@@ -43,17 +43,21 @@ class PHPMD
      *
      * @var list<string>
      */
-    private array $fileExtensions = ['php', 'php3', 'php4', 'php5', 'inc'];
+    private array $fileExtensions = [];
 
     /**
      * List of exclude directory patterns.
      *
      * @var list<string>
      */
-    private array $ignorePatterns = ['.git', '.svn', 'CVS', '.bzr', '.hg', 'SCCS'];
+    private array $ignorePatterns = [];
 
-    /** The input source file or directory. */
-    private string $input;
+    /**
+     * The input source file or directory.
+     *
+     * @var list<string>
+     */
+    private array $input;
 
     private ?ResultCacheEngine $resultCache = null;
 
@@ -97,8 +101,10 @@ class PHPMD
 
     /**
      * Returns the input source file or directory path.
+     *
+     * @return list<string>
      */
-    public function getInput(): string
+    public function getInput(): array
     {
         return $this->input;
     }
@@ -140,17 +146,14 @@ class PHPMD
      * the source analysis.
      *
      * @param list<string> $ignorePatterns List of ignore patterns.
-     * @return $this
      * @since 2.9.0
      */
-    public function addIgnorePatterns(array $ignorePatterns)
+    public function addIgnorePatterns(array $ignorePatterns): void
     {
         $this->ignorePatterns = [
             ...$this->ignorePatterns,
             ...$ignorePatterns,
         ];
-
-        return $this;
     }
 
     public function getResultCache(): ?ResultCacheEngine
@@ -158,14 +161,9 @@ class PHPMD
         return $this->resultCache;
     }
 
-    /**
-     * @return $this
-     */
-    public function setResultCache(ResultCacheEngine $resultCache)
+    public function setResultCache(ResultCacheEngine $resultCache): void
     {
         $this->resultCache = $resultCache;
-
-        return $this;
     }
 
     /**
@@ -193,13 +191,14 @@ class PHPMD
      * path. It will apply rules defined in the comma-separated <b>$ruleSets</b>
      * argument. The result will be passed to all given renderer instances.
      *
+     * @param list<string>        $inputPath
      * @param list<string>        $ignorePattern
      * @param RendererInterface[] $renderers
      * @param list<RuleSet>       $ruleSetList
      * @throws Exception
      */
     public function processFiles(
-        string $inputPath,
+        array $inputPath,
         array $ignorePattern,
         array $renderers,
         array $ruleSetList,
