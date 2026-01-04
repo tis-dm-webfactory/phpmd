@@ -29,6 +29,7 @@ use PHPMD\Cache\ResultCacheEngineFactory;
 use PHPMD\Cache\ResultCacheKeyFactory;
 use PHPMD\Cache\ResultCacheStateFactory;
 use PHPMD\PHPMD;
+use PHPMD\ProgressListener;
 use PHPMD\Renderer\RendererFactory;
 use PHPMD\Report;
 use PHPMD\Rule;
@@ -225,6 +226,7 @@ final class Command extends SymfonyCommand
             'An optional script to load before running analysis'
         );
         $this->addOption('input-file', null, InputOption::VALUE_REQUIRED, 'A file contaning paths to analyze');
+        $this->addOption('no-progress', null, InputOption::VALUE_NONE, 'Do not show progress bar, only results');
     }
 
     /**
@@ -359,12 +361,18 @@ final class Command extends SymfonyCommand
             }
         }
 
+        $progressListener = null;
+        if (!$input->getOption('no-progress')) {
+            $progressListener = new ProgressListener($output);
+        }
+
         $phpmd->processFiles(
             $options->getInputPaths(),
             $ignorePattern,
             $renderers,
             $ruleSetList,
-            $report ?? new Report()
+            $report ?? new Report(),
+            $progressListener
         );
 
         if ($phpmd->hasErrors() && !$options->ignoreErrorsOnExit()) {

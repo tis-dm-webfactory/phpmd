@@ -202,7 +202,8 @@ class PHPMD
         array $ignorePattern,
         array $renderers,
         array $ruleSetList,
-        Report $report
+        Report $report,
+        ?ProgressListener $progressListener = null
     ): void {
         // Merge parsed excludes
         $this->addIgnorePatterns($ignorePattern);
@@ -217,7 +218,7 @@ class PHPMD
         }
 
         $report->start();
-        $parser->parse($report);
+        $parser->parse($report, $progressListener);
         if ($this->resultCache !== null) {
             $state = $this->resultCache->getFileFilter()->getState();
             $state = $this->resultCache->getUpdater()->update($ruleSetList, $state, $report);
