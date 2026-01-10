@@ -92,19 +92,16 @@ class RuleSetFactory
     /**
      * Creates an array of rule-set instances for the given argument.
      *
-     * @param string $ruleSetFileNames Comma-separated string of rule-set filenames or identifier.
+     * @param list<string> $ruleSetFileNames Rule-set filenames or identifier.
      * @return list<RuleSet>
      * @throws RuntimeException
      */
-    public function createRuleSets(string $ruleSetFileNames): array
+    public function createRuleSets(array $ruleSetFileNames): array
     {
         $ruleSets = [];
 
-        $ruleSetFileName = strtok($ruleSetFileNames, ',');
-        while ($ruleSetFileName) {
+        foreach ($ruleSetFileNames as $ruleSetFileName) {
             $ruleSets[] = $this->createSingleRuleSet($ruleSetFileName);
-
-            $ruleSetFileName = strtok(',');
         }
 
         return $ruleSets;
@@ -131,10 +128,15 @@ class RuleSetFactory
      */
     public function listAvailableRuleSets(): array
     {
-        return [
-            ...self::listRuleSetsInDirectory($this->location . '/rulesets/'),
-            ...self::listRuleSetsInDirectory(getcwd() . '/rulesets/'),
-        ];
+        $rulesets = self::listRuleSetsInDirectory($this->location . '/rulesets/');
+        if ($this->location !== getcwd()) {
+            $rulesets = [
+                ...$rulesets,
+                ...self::listRuleSetsInDirectory(getcwd() . '/rulesets/'),
+            ];
+        }
+
+        return $rulesets;
     }
 
     /**
@@ -553,14 +555,14 @@ class RuleSetFactory
      *
      * http://pmd.sourceforge.net/pmd-5.0.4/howtomakearuleset.html#Excluding_files_from_a_ruleset
      *
-     * @param string $fileName The filename of a rule-set definition.
+     * @param list<string> $fileName The filename of a rule-set definition.
      * @return list<string>
      * @throws RuntimeException Thrown if file is not proper xml
      */
-    public function getIgnorePattern(string $fileName): array
+    public function getIgnorePattern(array $fileName): array
     {
         $excludes = [];
-        $files = array_map(trim(...), explode(',', $fileName));
+        $files = array_map(trim(...), $fileName);
         $files = array_filter($files);
 
         foreach ($files as $ruleSetFileName) {
