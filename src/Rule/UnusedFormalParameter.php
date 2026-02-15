@@ -18,6 +18,7 @@
 
 namespace PHPMD\Rule;
 
+use InvalidArgumentException;
 use OutOfBoundsException;
 use Override;
 use PDepend\Source\AST\AbstractASTCallable;
@@ -38,6 +39,7 @@ use PHPMD\Node\AbstractCallableNode;
 use PHPMD\Node\MethodNode;
 use PHPMD\Rule;
 use PHPMD\Rule\Design\CouplingBetweenObjects;
+use PHPMD\Utility\ExceptionsList;
 use RuntimeException;
 
 /**
@@ -54,11 +56,15 @@ final class UnusedFormalParameter extends AbstractLocalVariable implements Funct
      */
     private array $nodes = [];
 
+    /** Temporary cache of configured exceptions. */
+    private ExceptionsList $exceptions;
+
     /**
      * This method checks that all parameters of a given function or method are
      * used at least one time within the artifacts body.
      *
      * @throws RuntimeException
+     * @throws InvalidArgumentException
      */
     public function apply(AbstractNode $node): void
     {
@@ -89,7 +95,10 @@ final class UnusedFormalParameter extends AbstractLocalVariable implements Funct
         $this->removeUsedParameters($node);
 
         foreach ($this->nodes as $node) {
-            $this->addViolation($node, [$node->getImage()]);
+            $parameterName = $node->getImage();
+            if (!$this->getExceptionsList()->contains($parameterName)) {
+                $this->addViolation($node, [$parameterName]);
+            }
         }
     }
 
@@ -342,5 +351,15 @@ final class UnusedFormalParameter extends AbstractLocalVariable implements Funct
                 }
             }
         }
+    }
+
+    /**
+     * Gets array of exceptions from property
+     */
+    private function getExceptionsList(): ExceptionsList
+    {
+        $this->exceptions ??= new ExceptionsList($this, '$');
+
+        return $this->exceptions;
     }
 }
