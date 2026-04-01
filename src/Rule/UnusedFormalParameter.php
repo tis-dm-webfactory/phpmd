@@ -37,7 +37,6 @@ use PHPMD\AbstractNode;
 use PHPMD\Attribute\SuppressWarnings;
 use PHPMD\Node\AbstractCallableNode;
 use PHPMD\Node\MethodNode;
-use PHPMD\Rule;
 use PHPMD\Rule\Design\CouplingBetweenObjects;
 use PHPMD\Utility\ExceptionsList;
 use RuntimeException;
