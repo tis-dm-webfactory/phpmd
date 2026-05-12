@@ -181,14 +181,61 @@ __ /rules/naming.html
       </rule>
   </ruleset>
 
-Changing properties in a rule set for multiple rules
-====================================================
+Changing individual properties in a rule set
+============================================
 
-We want to use the basic codesize ruleset, but change parameter values for
-several rules. To avoid excluding every single (modified) rule, properties
-can be changed/overwritten without excluding the rules.
+We would like to use the `clean code`__ rule set, but our code uses the
+static constructors of the PHP date and time classes. This causes rule
+violations with the ``StaticAccess`` rule. To modify the ``exceptions``
+property of that rule while still keeping the rest of the rule set, we
+need to import the whole rule set, excluding the ``StaticAccess`` rule
+and then include the ``StaticAccess`` rule individually. Instead of using
+a ``value`` attribute for the property you can also use a ``<value>`` tag
+to make it more readable.
 
-__ /rules/codesize.html
+__ /rules/cleancode.html
+
+::
+
+  <?xml version="1.0"?>
+  <ruleset name="My first PHPMD rule set"
+           xmlns="https://phpmd.org/xml/ruleset/1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="https://phpmd.org/xml/ruleset/1.0.0
+                       http://phpmd.org/xml/ruleset_xml_schema_1.0.0.xsd"
+           xsi:noNamespaceSchemaLocation="
+                       http://phpmd.org/xml/ruleset_xml_schema_1.0.0.xsd">
+      <description>
+          My custom rule set that checks my code...
+      </description>
+
+      <!-- Import entire clean code rule set, modify StaticAccess rule -->
+      <rule ref="rulesets/cleancode.xml">
+          <exclude name="StaticAccess" />
+      </rule>
+      <rule ref="rulesets/cleancode.xml/StaticAccess">
+          <properties>
+              <property name="exceptions">
+                  <value>
+                    \DateTime,
+                    \DateInterval,
+                    \DateTimeZone
+                  </value>
+              </property>
+          </properties>
+      </rule>
+  </ruleset>
+
+This approach is also required when you need to change other aspects of a rule
+beyond properties, such as its ``<priority>``.
+
+Overwriting properties without excluding
+========================================
+
+When you only need to change properties and are modifying multiple rules,
+you can use a simpler syntax. After importing a rule set, add ``<rule>``
+elements with just a ``name`` attribute and the properties to override.
+This avoids having to exclude and re-include each rule individually.
 
 ::
 
