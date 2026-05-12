@@ -25,7 +25,6 @@ class testRuleDoesNotApplyToVariableReferenceInVariadicFunctions
     function testRuleDoesNotApplyToVariableReferenceInVariadicFunctions()
     {
         $variadic1 = 1;
-        $variadic2 = 2;
 
         return $this->foo("Text %d %d", $variadic1, $variadic2);
     }
