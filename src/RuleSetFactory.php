@@ -324,7 +324,13 @@ class RuleSetFactory
      */
     private function parseSingleRuleNode(RuleSet $ruleSet, array|ArrayAccess|SimpleXMLElement $ruleNode): void
     {
-        $className = isset($ruleNode['class']) && (is_string($ruleNode['class']) || $ruleNode['class'] instanceof Stringable) ? (string) $ruleNode['class'] : '';
+        $className = '';
+        if (isset($ruleNode['class'])) {
+            $value = $ruleNode['class'];
+            if (is_string($value) || $value instanceof Stringable) {
+                $className = (string) $value;
+            }
+        }
 
         if ($className === '' && !isset($ruleNode['file']) && $ruleNode instanceof SimpleXMLElement) {
             $this->modifyExistingRuleset($ruleSet, $ruleNode);

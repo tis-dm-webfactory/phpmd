@@ -566,8 +566,7 @@ class RuleSetFactoryTest extends AbstractTestCase
 
         foreach ($ruleSets[0] as $rule) {
             $name = $rule->getName();
-            $reflection = new ReflectionProperty('PHPMD\\AbstractRule', 'properties');
-            $reflection->setAccessible(true);
+            $reflection = new ReflectionProperty(AbstractRule::class, 'properties');
             $actual[$name] = $reflection->getValue($rule);
         }
 
