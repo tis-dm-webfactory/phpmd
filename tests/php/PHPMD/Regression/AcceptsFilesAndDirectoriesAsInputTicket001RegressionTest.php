@@ -29,9 +29,6 @@ use Symfony\Component\Console\Output\NullOutput;
  */
 class AcceptsFilesAndDirectoriesAsInputTicket001RegressionTest extends AbstractRegressionTestCase
 {
-    /**
-     * testCliAcceptsDirectoryAsInput
-     */
     public function testCliAcceptsDirectoryAsInput(): void
     {
         self::changeWorkingDirectory();
@@ -45,7 +42,7 @@ class AcceptsFilesAndDirectoriesAsInputTicket001RegressionTest extends AbstractR
         $inputPath = self::createFileUri('001/source');
         $phpmd->processFiles(
             [$inputPath],
-            $ruleSetFactory->getIgnorePattern(['pmd-refset1']),
+            $ruleSetFactory->getExcludePatterns(['pmd-refset1']),
             [$renderer],
             $ruleSetFactory->createRuleSets(['pmd-refset1']),
             new Report()
@@ -54,9 +51,6 @@ class AcceptsFilesAndDirectoriesAsInputTicket001RegressionTest extends AbstractR
         static::assertSame([$inputPath], $phpmd->getInput());
     }
 
-    /**
-     * testCliAcceptsSingleFileAsInput
-     */
     public function testCliAcceptsSingleFileAsInput(): void
     {
         self::changeWorkingDirectory();
@@ -70,7 +64,7 @@ class AcceptsFilesAndDirectoriesAsInputTicket001RegressionTest extends AbstractR
         $inputPath = self::createFileUri('001/source/FooBar.php');
         $phpmd->processFiles(
             [$inputPath],
-            $ruleSetFactory->getIgnorePattern(['pmd-refset1']),
+            $ruleSetFactory->getExcludePatterns(['pmd-refset1']),
             [$renderer],
             $ruleSetFactory->createRuleSets(['pmd-refset1']),
             new Report()

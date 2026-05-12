@@ -95,7 +95,7 @@ class CommandLineOptions
      *
      * @var list<string>
      */
-    private array $ignore = [];
+    private array $excludePatterns = [];
 
     /**
      * Should PHPMD run in strict mode?
@@ -159,7 +159,7 @@ class CommandLineOptions
 
         /** @var list<string> */
         $ignore = $input->getOption('exclude');
-        $this->ignore = $ignore;
+        $this->excludePatterns = $ignore;
         $this->strict = (bool) $input->getOption('strict');
         $this->generateBaseline = $input->getOption('update-baseline') ? BaselineMode::Update : BaselineMode::None;
         if ($input->getOption('generate-baseline')) {
@@ -171,7 +171,7 @@ class CommandLineOptions
         $this->cacheStrategy = ResultCacheStrategy::from($this->readString($input, 'cache-strategy') ?? 'content');
         $this->ignoreErrorsOnExit = (bool) $input->getOption('ignore-errors-on-exit');
         $this->ignoreViolationsOnExit = (bool) $input->getOption('ignore-violations-on-exit');
-        foreach (['checkstyle', 'github', 'gitlab', 'html', 'json', 'sarif', 'text', 'xml'] as $type) {
+        foreach (['checkstyle', 'github', 'githubcheckruns', 'gitlab', 'html', 'json', 'sarif', 'text', 'xml'] as $type) {
             $value = $this->readString($input, 'reportfile-' . $type);
             if ($value) {
                 $this->reportFiles[$type] = $value;
@@ -292,9 +292,9 @@ class CommandLineOptions
      *
      * @return list<string>
      */
-    public function getIgnore(): array
+    public function getExcludePatterns(): array
     {
-        return $this->ignore;
+        return $this->excludePatterns;
     }
 
     public function getThreads(): ?int

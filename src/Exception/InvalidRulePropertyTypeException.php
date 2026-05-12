@@ -18,7 +18,6 @@
 
 namespace PHPMD\Exception;
 
-use RuntimeException;
 use Throwable;
 
 /**
