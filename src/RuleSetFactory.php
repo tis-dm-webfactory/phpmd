@@ -332,7 +332,7 @@ class RuleSetFactory
             }
         }
 
-        if ($className === '' && !isset($ruleNode['file']) && $ruleNode instanceof SimpleXMLElement) {
+        if ($className === '' && !isset($ruleNode['file'])) {
             $this->modifyExistingRuleset($ruleSet, $ruleNode);
 
             return;
@@ -505,18 +505,17 @@ class RuleSetFactory
     /**
      * Modify an existing rule in the ruleset by name.
      *
+     * @param array<mixed>|ArrayAccess<string, mixed>|SimpleXMLElement $ruleNode
      * @throws RuntimeException
      */
-    private function modifyExistingRuleset(RuleSet $ruleSet, SimpleXMLElement $ruleNode): void
+    private function modifyExistingRuleset(RuleSet $ruleSet, array|ArrayAccess|SimpleXMLElement $ruleNode): void
     {
-        $ruleName = isset($ruleNode['name']) ? (string) $ruleNode['name'] : '';
+        $name = $ruleNode['name'] ?? null;
+        $ruleName = is_string($name) || $name instanceof Stringable ? (string) $name : '';
 
         try {
             $rule = $ruleSet->getRuleByName($ruleName);
-
-            if (isset($ruleNode->properties)) {
-                $this->parsePropertiesNode($rule, $ruleNode->properties);
-            }
+            $this->parseRuleProperties($rule, $ruleNode);
         } catch (RuleByNameNotFoundException $exception) {
             return;
         }
@@ -718,7 +717,7 @@ class RuleSetFactory
      */
     private function getConfigFromJsonFile(string $fileName): RuleSet
     {
-        $config = json_decode(file_get_contents($fileName) ?: '');
+        $config = json_decode(file_get_contents($fileName) ?: '', true);
         if (!is_array($config)) {
             throw new RuntimeException('Invalid config');
         }

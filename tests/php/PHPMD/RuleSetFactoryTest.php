@@ -542,7 +542,8 @@ class RuleSetFactoryTest extends AbstractTestCase
     /**
      * Check if rule properties are changed by name only without having to exclude a rule first
      */
-    public function testCreateRuleSetsWithoutRuleReferenceThatOverwritesSettings(): void
+    #[DataProvider('ruleOverwriteFormats')]
+    public function testCreateRuleSetsWithoutRuleReferenceThatOverwritesSettings(string $ruleSet): void
     {
         self::changeWorkingDirectory();
 
@@ -560,7 +561,7 @@ class RuleSetFactoryTest extends AbstractTestCase
         ];
 
         $factory = new RuleSetFactory();
-        $ruleSets = $factory->createRuleSets(['refset5']);
+        $ruleSets = $factory->createRuleSets([$ruleSet]);
 
         $actual = [];
 
@@ -576,7 +577,8 @@ class RuleSetFactoryTest extends AbstractTestCase
     /**
      * Check if properties are changed, but no additional properties are added to rules
      */
-    public function testCreateRuleSetsWithoutRuleReferenceThatOverwritesSettingsButDoesntAddProperties(): void
+    #[DataProvider('ruleOverwriteFormats')]
+    public function testCreateRuleSetsWithoutRuleReferenceThatOverwritesSettingsButDoesntAddProperties(string $ruleSet): void
     {
         self::changeWorkingDirectory();
 
@@ -587,7 +589,7 @@ class RuleSetFactoryTest extends AbstractTestCase
         ];
 
         $factory = new RuleSetFactory();
-        $ruleSets = $factory->createRuleSets(['refset5']);
+        $ruleSets = $factory->createRuleSets([$ruleSet]);
         $actualRules = [];
 
         foreach ($ruleSets[0] as $rule) {
@@ -595,6 +597,20 @@ class RuleSetFactoryTest extends AbstractTestCase
         }
 
         static::assertSame($expectedRules, $actualRules);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function ruleOverwriteFormats(): array
+    {
+        $dir = __DIR__ . '/../../resources/files/rulesets/';
+
+        return [
+            'xml' => ['refset5'],
+            'yaml' => [$dir . 'refset5.yml'],
+            'json' => [$dir . 'refset5.json'],
+        ];
     }
 
     /**
