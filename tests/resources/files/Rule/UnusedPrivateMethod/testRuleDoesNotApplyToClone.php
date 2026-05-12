@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of PHP Mess Detector.
  *
@@ -16,19 +15,17 @@
  * @link http://phpmd.org/
  */
 
-namespace PHPMD\Regression;
-
-use PHPMD\Rule\UnusedLocalVariable;
-
-/**
- * Regression test for issue 019.
- */
-class SuperGlobalsFlaggedAsUnusedTicket019RegressionTest extends AbstractRegressionTestCase
+class testRuleDoesNotApplyToClone
 {
-    public function testRuleDoesNotApplyToAnySuperGlobalVariable(): void
+    private function foo()
     {
-        $rule = new UnusedLocalVariable();
-        $rule->setReport($this->getReportWithNoViolation());
-        $rule->apply($this->getMethod());
+
+    }
+
+    public function bar()
+    {
+        $other = clone $this;
+        $next = clone $other;
+        $next->foo();
     }
 }

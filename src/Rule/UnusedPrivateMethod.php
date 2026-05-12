@@ -19,23 +19,28 @@
 namespace PHPMD\Rule;
 
 use OutOfBoundsException;
+use PDepend\Source\AST\AbstractASTCombinationType;
 use PDepend\Source\AST\ASTAllocationExpression;
-use PDepend\Source\AST\ASTArray;
-use PDepend\Source\AST\ASTArrayElement;
-use PDepend\Source\AST\ASTAssignmentExpression;
+use PDepend\Source\AST\ASTClassOrInterfaceReference;
 use PDepend\Source\AST\ASTCloneExpression;
 use PDepend\Source\AST\ASTExpression;
-use PDepend\Source\AST\ASTLiteral;
+use PDepend\Source\AST\ASTFormalParameters;
 use PDepend\Source\AST\ASTMethodPostfix;
 use PDepend\Source\AST\ASTNode as PDependNode;
+use PDepend\Source\AST\ASTScope;
 use PDepend\Source\AST\ASTSelfReference;
 use PDepend\Source\AST\ASTStaticReference;
+use PDepend\Source\AST\ASTType;
 use PDepend\Source\AST\ASTVariable;
 use PHPMD\AbstractNode;
 use PHPMD\AbstractRule;
 use PHPMD\Node\ClassNode;
 use PHPMD\Node\MethodNode;
+use PHPMD\Utility\CallableArray;
+use PHPMD\Utility\LastVariableWriting;
+use PHPMD\Utility\Seeker;
 use RuntimeException;
+use SplObjectStorage;
 
 /**
  * This rule collects all private methods in a class that aren't used in any
@@ -43,6 +48,12 @@ use RuntimeException;
  */
 final class UnusedPrivateMethod extends AbstractRule implements ClassAware
 {
+    /** @var SplObjectStorage<AbstractNode<PDependNode>, bool> */
+    private $selfVariableCache;
+
+    /** @var SplObjectStorage<PDependNode, ASTFormalParameters> */
+    private $parametersForScope;
+
     /**
      * This method checks that all private class methods are at least accessed
      * by one method.
@@ -55,6 +66,8 @@ final class UnusedPrivateMethod extends AbstractRule implements ClassAware
         if (!$class instanceof ClassNode) {
             return;
         }
+
+        $this->selfVariableCache = new SplObjectStorage();
 
         foreach ($this->collectUnusedPrivateMethods($class) as $node) {
             $this->addViolation($node, [$node->getImage()]);
@@ -122,6 +135,17 @@ final class UnusedPrivateMethod extends AbstractRule implements ClassAware
      */
     private function removeUsedMethods(ClassNode $class, array $methods): array
     {
+        $this->parametersForScope = new SplObjectStorage();
+
+        foreach ($class->getMethods() as $method) {
+            $children = $method->getNode()->getChildren();
+
+            /** @var ASTFormalParameters $parameters */
+            $parameters = $children[0];
+            $scope = $children[1];
+            $this->parametersForScope->offsetSet($scope, $parameters);
+        }
+
         $methods = $this->removeExplicitCalls($class, $methods);
 
         return $this->removeCallableArrayRepresentations($class, $methods);
@@ -154,10 +178,10 @@ final class UnusedPrivateMethod extends AbstractRule implements ClassAware
      */
     private function removeCallableArrayRepresentations(ClassNode $class, array $methods): array
     {
-        foreach ($class->findChildrenOfType(ASTVariable::class) as $variable) {
-            $parent = $variable->getParent();
-            if ($parent && $this->isClassScope($class, $variable) && $variable->getImage() === '$this') {
-                $method = $this->getMethodNameFromArraySecondElement($parent);
+        foreach ($class->findChildrenOfTypeVariable() as $variable) {
+            if ($this->isInstanceOfTheCurrentClass($class, $variable)) {
+                $method = CallableArray::fromFirstArrayElement($variable->getParent())
+                    ->getMethodNameFromArraySecondElement();
 
                 if ($method) {
                     unset($methods[strtolower($method)]);
@@ -166,33 +190,6 @@ final class UnusedPrivateMethod extends AbstractRule implements ClassAware
         }
 
         return $methods;
-    }
-
-    /**
-     * Return represented method name if the given element is a 2-items array
-     * and that the second one is a literal static string.
-     *
-     * @param AbstractNode<PDependNode> $parent
-     * @throws OutOfBoundsException
-     */
-    private function getMethodNameFromArraySecondElement(AbstractNode $parent): ?string
-    {
-        if ($parent->isInstanceOf(ASTArrayElement::class)) {
-            $array = $parent->getParent();
-
-            if (
-                $array?->isInstanceOf(ASTArray::class)
-                && count($array->getChildren()) === 2
-            ) {
-                $secondElement = $array->getChild(1)->getChild(0);
-
-                if ($secondElement->isInstanceOf(ASTLiteral::class)) {
-                    return substr($secondElement->getImage(), 1, -1);
-                }
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -209,94 +206,135 @@ final class UnusedPrivateMethod extends AbstractRule implements ClassAware
             return false;
         }
 
+        if ($owner->isInstanceOf(ASTVariable::class)) {
+            return $this->isInstanceOfTheCurrentClass($class, $owner);
+        }
+
         return (
             $owner->isInstanceOf(ASTMethodPostfix::class) ||
             $owner->isInstanceOf(ASTSelfReference::class) ||
-            strcasecmp($owner->getImage(), '$this') === 0 ||
-            strcasecmp($owner->getImage(), $class->getImage()) === 0 ||
-            $this->isVariableOfSelfType($class, $owner)
+            $owner->isInstanceOf(ASTStaticReference::class) ||
+            strcasecmp($owner->getImage(), $class->getImage()) === 0
         );
     }
 
     /**
-     * Checks if the given variable is assigned from a construction of the current class
-     * (e.g. clone $this, new self, new static, new ClassName).
-     *
-     * @param AbstractNode<PDependNode> $owner
+     * @param AbstractNode<PDependNode> $variable
      * @throws OutOfBoundsException
      */
-    private function isVariableOfSelfType(ClassNode $class, AbstractNode $owner): bool
+    private function isInstanceOfTheCurrentClass(ClassNode $class, AbstractNode $variable): bool
     {
-        if (!$owner->isInstanceOf(ASTVariable::class)) {
+        if ($this->selfVariableCache->offsetExists($variable)) {
+            return (bool) $this->selfVariableCache->offsetGet($variable);
+        }
+
+        $result = $this->calculateInstanceOfTheCurrentClass($class, $variable);
+        $this->selfVariableCache->offsetSet($variable, $result);
+
+        return $result;
+    }
+
+    /**
+     * @param AbstractNode<PDependNode> $variable
+     * @throws OutOfBoundsException
+     */
+    private function calculateInstanceOfTheCurrentClass(ClassNode $class, AbstractNode $variable): bool
+    {
+        $name = $variable->getImage();
+
+        if (strcasecmp($name, '$this') === 0) {
+            return true;
+        }
+
+        $scope = Seeker::fromNode($variable)->getParentOfType(ASTScope::class);
+
+        if (!$scope) {
             return false;
         }
 
-        $variableName = $owner->getImage();
+        $lastWritingFinder = new LastVariableWriting($variable);
+        $lastWriting = $lastWritingFinder->findInScope($scope);
 
-        foreach ($class->findChildrenOfType(ASTAssignmentExpression::class) as $assignment) {
-            $leftSide = $assignment->getChild(0);
-            if ($leftSide->getImage() !== $variableName) {
-                continue;
-            }
+        if (!$lastWriting) {
+            $scopeNode = $scope->getNode();
 
-            if ($this->isCloneOfSelf($class, $assignment) || $this->isNewSelf($class, $assignment)) {
-                return true;
+            if ($this->parametersForScope->offsetExists($scopeNode)) {
+                /** @var ASTFormalParameters $parameters */
+                $parameters = $this->parametersForScope->offsetGet($scopeNode);
+                $lastWriting = $lastWritingFinder->findInParameters($parameters);
             }
         }
 
-        return false;
+        if ($lastWriting instanceof ASTType) {
+            return $this->canBeCurrentClassInstance($class, $lastWriting);
+        }
+
+        return ($lastWriting instanceof AbstractNode)
+            && $this->isWritingOfSelfType($class, $name, $lastWriting);
     }
 
     /**
-     * Checks if the assignment contains a clone of $this or self.
-     *
-     * @param AbstractNode<PDependNode> $assignment
+     * @param AbstractNode<PDependNode> $lastWriting
      * @throws OutOfBoundsException
      */
-    private function isCloneOfSelf(ClassNode $class, AbstractNode $assignment): bool
+    private function isWritingOfSelfType(ClassNode $class, string $name, AbstractNode $lastWriting): bool
     {
-        foreach ($assignment->findChildrenOfType(ASTCloneExpression::class) as $clone) {
-            $clonedObject = $clone->getChild(0);
+        if ($lastWriting->isInstanceOf(ASTCloneExpression::class)) {
+            $cloned = Seeker::fromNode($lastWriting)->getChildIfExist(0);
 
-            if ($this->isSelfReference($class, $clonedObject)) {
+            return $cloned
+                && $cloned->isInstanceOf(ASTVariable::class)
+                && $this->isInstanceOfTheCurrentClass($class, $cloned);
+        }
+
+        if ($lastWriting->isInstanceOf(ASTAllocationExpression::class)) {
+            $value = Seeker::fromNode($lastWriting)->getChildIfExist(0);
+
+            if (!$value) {
+                return false;
+            }
+
+            if ($value->isInstanceOf(ASTSelfReference::class) || $value->isInstanceOf(ASTStaticReference::class)) {
                 return true;
             }
+
+            return $value->isInstanceOf(ASTClassOrInterfaceReference::class)
+                && $this->representCurrentClassName($class, $value->getImage());
+        }
+
+        if ($lastWriting->isInstanceOf(ASTVariable::class) && $lastWriting->getImage() !== $name) {
+            return $this->isInstanceOfTheCurrentClass($class, $lastWriting);
         }
 
         return false;
     }
 
-    /**
-     * Checks if the assignment contains a new self/static/ClassName construction.
-     *
-     * @param AbstractNode<PDependNode> $assignment
-     * @throws OutOfBoundsException
-     */
-    private function isNewSelf(ClassNode $class, AbstractNode $assignment): bool
+    private function canBeCurrentClassInstance(ClassNode $class, ASTType $type): bool
     {
-        foreach ($assignment->findChildrenOfType(ASTAllocationExpression::class) as $allocation) {
-            $classReference = $allocation->getChild(0);
-
-            if ($this->isSelfReference($class, $classReference)) {
-                return true;
+        if ($type instanceof AbstractASTCombinationType) {
+            foreach ($type->getChildren() as $child) {
+                if ($child instanceof ASTType && $this->canBeCurrentClassInstance($class, $child)) {
+                    return true;
+                }
             }
+
+            return false;
+        }
+
+        if ($type instanceof ASTClassOrInterfaceReference) {
+            return $this->representCurrentClassName($class, $type->getImage());
         }
 
         return false;
     }
 
-    /**
-     * Checks if the given node refers to the current class ($this, self, static, or class name).
-     *
-     * @param AbstractNode<PDependNode> $node
-     */
-    private function isSelfReference(ClassNode $class, AbstractNode $node): bool
+    private function representCurrentClassName(ClassNode $class, string $name): bool
     {
-        return (
-            strcasecmp($node->getImage(), '$this') === 0 ||
-            $node->isInstanceOf(ASTStaticReference::class) ||
-            $node->isInstanceOf(ASTSelfReference::class) ||
-            strcasecmp($node->getImage(), $class->getImage()) === 0
-        );
+        return in_array($name, [
+            'self',
+            'static',
+            $class->getImage(),
+            $class->getFullQualifiedName(),
+        ], true);
     }
 }
